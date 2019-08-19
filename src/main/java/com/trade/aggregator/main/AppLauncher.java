@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @PropertySource(value = "classpath:application.properties")
 @EnableScheduling
 
-public class AppLauncher {// implements CommandLineRunner {
+public class AppLauncher {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
