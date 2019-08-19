@@ -14,7 +14,7 @@ public class UIPublisher implements IUIPublisher {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public void publishTradeToUI (Trade trade) {
-		LOGGER.info("Recieved Trade : " + trade.toString());
+		LOGGER.info("Received Trade : " + trade.toString());
 	}
 
 	public void publishBlockToUI(Trade trade) {
