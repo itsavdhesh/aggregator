@@ -15,7 +15,7 @@ public class StockJdbcRepository {
 	JdbcTemplate jdbcTemplate;
 
 	public List<Stock> findAll() {
-		return jdbcTemplate.query("select * from STOCKS", new StockRowMapper());
+		return jdbcTemplate.query("select * from Stocks", new StockRowMapper());
 	}
 }
 

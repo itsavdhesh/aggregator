@@ -17,7 +17,7 @@ public class ClientJdbcRepository {
 	JdbcTemplate jdbcTemplate;
 
 	public List<Client> findAll() {
-		return jdbcTemplate.query("select * from CLIENTS", new ClientRowMapper());
+		return jdbcTemplate.query("select * from Clients", new ClientRowMapper());
 	}
 }
 

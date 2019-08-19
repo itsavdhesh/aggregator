@@ -1,9 +1,8 @@
 package com.trade.aggregator.dblayer;
 
-import org.hibernate.annotations.Entity;
-import org.springframework.stereotype.Component;
+import javax.persistence.Entity;
 
-@Component
+@Entity
 public class Client {
 
 	long id;

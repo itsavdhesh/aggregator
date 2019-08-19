@@ -16,10 +16,10 @@ public class TradeReceiver implements ITradeReceiver {
 
 	@Override
 	public void onMessage(Trade trade) {
-
-		if (trade == null)
+		
+		if (trade == null) 
 			return;
-
+		
 		IUIPublisher uiPublisher = (IUIPublisher) context.getBean(UIPublisher.class);
 		uiPublisher.publishTradeToUI(trade);
 		TradeAggregator tradeAggregator = (TradeAggregator) context.getBean(TradeAggregator.class);

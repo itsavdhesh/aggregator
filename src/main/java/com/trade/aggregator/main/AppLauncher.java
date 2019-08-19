@@ -11,12 +11,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.trade.aggregator.core", "com.trade.aggregator.testtrade",
-		"com.trade.aggregator.publisher" , "com.trade.aggregator.dblayer" ,"com.trade.aggregator.entities" })
+@ComponentScan(basePackages = { "com.trade.aggregator.core", "com.trade.aggregator.entities", "com.trade.aggregator.testtrade",
+		"com.trade.aggregator.publisher", "com.trade.aggregator.dblayer" })
 @PropertySource(value = "classpath:application.properties")
 @EnableScheduling
 
-public class AppLauncher {//implements CommandLineRunner {
+public class AppLauncher {// implements CommandLineRunner {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 

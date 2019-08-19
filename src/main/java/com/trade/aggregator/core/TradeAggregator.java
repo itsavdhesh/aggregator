@@ -69,7 +69,7 @@ class AggregatorTask implements Runnable {
 			block.setExecutedQuantity(block.getExecutedQuantity() + trade.getExecutedQuantity());
 			block.setExecutedPrice(avgPrice);
 			mainCache.getTradeCache().put(key, block);
-			//uiPublisher.publishBlockToUI(block);
+			uiPublisher.publishBlockToUI(block);
 		}
 	}
 }

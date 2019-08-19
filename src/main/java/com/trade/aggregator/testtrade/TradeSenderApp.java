@@ -17,7 +17,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.trade.aggregator.core.TradeReceiver;
+import com.trade.aggregator.dblayer.Client;
 import com.trade.aggregator.dblayer.ClientJdbcRepository;
+import com.trade.aggregator.dblayer.Stock;
 import com.trade.aggregator.dblayer.StockJdbcRepository;
 import com.trade.aggregator.entities.Trade;
 
@@ -37,55 +39,33 @@ public class TradeSenderApp {
 
 	static Random random = new Random();
 
-	List<String> clientList = new ArrayList<String>();
-	List<String> stockList = new ArrayList<String>();
+	List<Client> clientList = new ArrayList<Client>();
+	List<Stock> stockList = new ArrayList<Stock>();
 	Map<String, Double> stockClosingPrice = new HashMap<String, Double>();
 
 	private static long tradeId = 1000000;
 
-	public TradeSenderApp() {
-		clientList.add("BLACKR");
-		clientList.add("MILL");
-		clientList.add("TRS");
-		clientList.add("MPLMT");
-		clientList.add("UBS");
-		clientList.add("CITI");
-		clientList.add("JP");
-
-		stockClosingPrice.put("IBM", 120.45);
-		stockClosingPrice.put("GOOG", 230.15);
-		stockClosingPrice.put("PTS", 34.55);
-		stockClosingPrice.put("APPL", 27.25);
-		stockClosingPrice.put("INFY", 78.40);
-		stockClosingPrice.put("TESLA", 56.95);
-		stockClosingPrice.put("TAMP", 66.65);
-
-		stockList.add("IBM");
-		stockList.add("GOOG");
-		stockList.add("PTS");
-		stockList.add("APPL");
-		stockList.add("INFY");
-		stockList.add("TESLA");
-		stockList.add("TAMP");
-
-	}
-
-	@Scheduled(fixedRate = 1000)
+	@Scheduled(fixedDelay = 100)
 	public void publishTrade() {
-
 		Trade trade = getTrade();
-		System.out.println("Sending Trades : " + trade.toString());
+		long delay = random.nextInt(400);
+		try {
+			Thread.sleep(100 + delay);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		TradeReceiver tr = (TradeReceiver) context.getBean(TradeReceiver.class);
 		tr.onMessage(trade);
-
 	}
 
 	@PostConstruct
-	public void dislayDBData() {
+	public void intiStaticData() {
 
 		LOGGER.info("Stocks -> {}", stockRepository.findAll());
 		LOGGER.info("Clients -> {}", clientRepository.findAll());
 
+		clientList.addAll(clientRepository.findAll());
+		stockList.addAll(stockRepository.findAll());
 	}
 
 	private Trade getTrade() {
@@ -94,21 +74,21 @@ public class TradeSenderApp {
 		int stockIndex = random.nextInt(stockList.size());
 		int quantity = random.nextInt(5000);
 		int sideIndex = random.nextInt(2);
-		String stock = stockList.get(stockIndex);
+		String stock = stockList.get(stockIndex).getStock();
 		String side = null;
 
 		if (sideIndex == 0)
 			side = "B";
 		else
 			side = "S";
-		Trade trade = new Trade(getPrice(stock), quantity, String.valueOf(tradeId++), side, stock,
-				clientList.get(clientIndex), 20190805, null);
+		Trade trade = new Trade(getPrice(stockIndex), quantity, String.valueOf(tradeId++), side, stock,
+				clientList.get(clientIndex).getClientCode(), 20190805, null);
 		return trade;
 	}
 
-	private double getPrice(String stock) {
+	private double getPrice(int stockIndex) {
 		double price = 0.0;
-		double closingPrice = stockClosingPrice.get(stock);
+		double closingPrice = stockList.get(stockIndex).getLastPrice();
 		double onePercent = closingPrice / 100;
 		price = random.nextDouble() * ((closingPrice + onePercent) - (closingPrice - onePercent))
 				+ (closingPrice - onePercent);
